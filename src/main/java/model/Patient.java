@@ -36,19 +36,12 @@ public class Patient extends Account implements Reservable{
         return address;
     }
 
+    @Override
 	public Reservation createReservation(String doctorName, LocalDate date, String keluhan, String status) {
-	    LocalDate today = LocalDate.now();
-	    
-	    if (date.isBefore(today)) {
-	        System.out.println("❌ Tanggal tidak valid. Tidak bisa memilih tanggal yang sudah lewat.");
-	        return null;
-	    }
-
-	    Reservation reservasi = new Reservation(name, doctorName, date, keluhan, status, "online");
-	    reservations.add(reservasi); 
-	    return reservasi;
+	    	 Reservation reservasi = new Reservation(doctorName, date, keluhan, status, "online");
+	 	     reservations.add(reservasi); 
+	 	     return reservasi;
 	}
-
 
     public void viewHistory() {
         System.out.println("=== Riwayat Reservasi ===");

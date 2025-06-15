@@ -32,10 +32,10 @@ public class OnlineConsultation {
     }
     
     public void GeneralConsultation() {
-    	System.out.println("Pasien: Dok, saya merasa demam dan pusing sejak kemarin.");
-    	System.out.println("Dokter " + doctorName + ": Apakah disertai batuk atau nyeri tenggorokan?");
-    	System.out.println("Pasien: Iya dok, saya juga agak susah tidur.");
-    	System.out.println("Dokter " + doctorName + ": Baik, saya akan resepkan Paracetamol dan sarankan istirahat cukup.");
+    	System.out.println("[Pasien] Dok, saya merasa demam dan pusing sejak kemarin.");
+    	System.out.println("[Dokter Umum] " + doctorName + ": Apakah disertai batuk atau nyeri tenggorokan?");
+    	System.out.println("[Pasien] Iya dok, saya juga agak susah tidur.");
+    	System.out.println("[Dokter Umum]" + doctorName + ": Baik, saya akan resepkan Paracetamol dan sarankan istirahat cukup.");
     	System.out.println("--- Chat selesai ---\n");
     }
 }

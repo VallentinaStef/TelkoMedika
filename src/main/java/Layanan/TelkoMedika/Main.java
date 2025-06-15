@@ -2,9 +2,9 @@ package Layanan.TelkoMedika;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import Delivery.Payment;
 import controller.QueueManager;
 
-import java.time.LocalDate;
 import model.*;
 import controller.*;
 
@@ -12,7 +12,7 @@ import controller.*;
 public class Main {
 	public static void main(String[] args) {
 		
-		final int MAX_LOGIN_ATTEMPTS = 3;
+		final int maxAttempt = 3;
 		int attempts = 0;
 		boolean found = false;
 		
@@ -24,14 +24,17 @@ public class Main {
         ArrayList<Doctor> doctorList = new ArrayList<>();
         ArrayList<News> newsList  = new ArrayList<>();
         
-        ReservasiManager reservManager = new ReservasiManager();           
+        ReservationManager reservManager = new ReservationManager();           
         NewsManager newsManager = new NewsManager();
+        Payment payment = new Payment();
         
         
         
-        Patient pasien1 = new Patient("pasien1", "12345", "Tepani", "08123456789", "Bandung");
-        Patient pasien2 = new Patient("pasien2", "password123", "Budi", "082233445566", "Jakarta");
+        Patient pasien1 = new Patient("stefhanievall", "12345", "Stefhanie", "08123456789", "Bandung");
+        Patient pasien2 = new Patient("AzzharaPuji", "Puji123", "Budi", "082233445566", "Pati");
+        
 
+        
         
         userList.add(pasien1);
         userList.add(pasien2);
@@ -100,7 +103,8 @@ public class Main {
         System.out.println("=== TELKOM MEDIKA SYSTEM ===");
 
         
-        while (attempts < MAX_LOGIN_ATTEMPTS && !found) {
+        while (attempts < maxAttempt && !found) {
+        	System.out.println("Silahkan Masuk menggunakan Akun SSO Anda");
             System.out.print("Username: ");
             String username = scanner.nextLine();
             System.out.print("Password: ");
@@ -119,8 +123,8 @@ public class Main {
 
             if (!found) {
                 attempts++;
-                if (attempts < MAX_LOGIN_ATTEMPTS) {
-                    System.out.println("Login gagal. Coba lagi (" + (MAX_LOGIN_ATTEMPTS - attempts) + " kesempatan tersisa).\n");
+                if (attempts < maxAttempt) {
+                    System.out.println("Login gagal. Coba lagi (" + (maxAttempt - attempts) + " kesempatan tersisa).\n");
                 } else {
                     System.out.println("Kesempatan Habis, keluar dari system");
                     System.exit(0);
@@ -129,75 +133,55 @@ public class Main {
         }
         
         QueueManager queueManager = new QueueManager(10);
-
         int pilihan = -1;
+
         while (pilihan != 0) {
-            System.out.println("\nMenu:");
-            System.out.println("1. Buat Reservasi");
-            System.out.println("2. Lihat Riwayat");
-            System.out.println("3. Lihat Notifikasi");
-            System.out.println("4. Baca Berita");
-            System.out.println("5. Lihat Jam Operasional");
-            System.out.println("6. Berikan Feedback");
-            System.out.println("0. LogOut");
-            System.out.print("Pilih: ");
-            pilihan = scanner.nextInt();
-            scanner.nextLine(); 
+            try {
+                System.out.println("\nMenu:");
+                System.out.println("1. Buat Reservasi");
+                System.out.println("2. Lihat Riwayat");
+                System.out.println("3. Lihat Notifikasi");
+                System.out.println("4. Baca Berita");
+                System.out.println("5. Lihat Jam Operasional");
+                System.out.println("6. Lihat Dokter");
+                System.out.println("0. LogOut");
+                System.out.print("Pilih: ");
 
-            switch (pilihan) {
-            case 1: 
-            	reservManager.createReservation(pasien, doctorList, queueManager, scanner);
-                break;
-                case 2:
-                	reservManager.showReservationOptions(pasien, scanner);
-                    break;
-                case 3:
-                    pasien.viewNotifications();
-                    break;
-                case 4:
-                	newsManager.viewNews(newsList);
-                    break;
-                case 5:
-                    schedule.displaySchedule();
-                    break;
-                case 6:
-                	System.out.print("Masukkan ID Feedback: ");
-                    String feedbackId = scanner.nextLine();
+                pilihan = Integer.parseInt(scanner.nextLine());
 
-                    System.out.print("Masukkan nama pasien: ");
-                    String patientName = scanner.nextLine();
+                switch (pilihan) {
+                    case 1:
+                        reservManager.createReservation(pasien, doctorList, queueManager, scanner, payment);
+                        break;
+                    case 2:
+                        reservManager.showReservationOptions(pasien, scanner, queueManager);
+                        break;
+                    case 3:
+                        pasien.viewNotifications();
+                        break;
+                    case 4:
+                        newsManager.viewNews(newsList);
+                        break;
+                    case 5:
+                        schedule.displaySchedule();
+                        break;
+                    case 6:
+                    	for (Doctor doctor : doctorList) {
+                			doctor.viewDoctorOnlineConsultation();
+                		}
+                    	break;
+                    case 0:
+                        System.out.println("Keluar dari sistem...");
+                        break;
+                    default:
+                        System.out.println("Pilihan tidak valid.");
+                }
 
-                    System.out.print("Masukkan nama dokter: ");
-                    String doctorNamee = scanner.nextLine();
-
-                    int rating = 0;
-                    while (true) {
-                        System.out.print("Masukkan rating (1-5): ");
-                        try {
-                            rating = Integer.parseInt(scanner.nextLine());
-                            if (rating >= 1 && rating <= 5) break;
-                            else System.out.println("Rating harus antara 1-5!");
-                        } catch (NumberFormatException e) {
-                            System.out.println("Input harus berupa angka!");
-                        }
-                    }
-
-                    System.out.print("Masukkan komentar: ");
-                    String comment = scanner.nextLine();
-
-                    Feedback feedback = new Feedback(feedbackId, patientName, doctorNamee, rating, comment);
-                    System.out.println("\nFeedback berhasil disimpan!");
-                    feedback.submitFeedback();
-                    break;
-
-                case 0:
-                    System.out.println("Keluar dari sistem...");
-                    break;
-                default:
-                    System.out.println("Pilihan tidak valid.");
+            } catch (NumberFormatException e) {
+                System.out.println("Silakan isi dengan angka.");
+            } catch (Exception e) {
+                System.out.println("Terjadi kesalahan: " + e.getMessage());
             }
         }
-
-        scanner.close();
-    }
+	}
 }

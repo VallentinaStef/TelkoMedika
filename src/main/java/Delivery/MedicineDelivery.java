@@ -18,15 +18,11 @@ public class MedicineDelivery {
         this.deliveryStatus = status;
     }
     
-    public void createPayment(double medicineCost, double deliveryFee) {
-        this.payment = new Payment(medicineCost, deliveryFee);
-    }
-    
     public void payDelivery() {
         if (payment != null) {
             payment.pay();
         } else {
-            System.out.println("❌ Belum ada pembayaran dibuat.");
+            System.out.println("Belum ada pembayaran dibuat.");
         }
     }
 }
