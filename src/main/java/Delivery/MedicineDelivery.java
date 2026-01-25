@@ -1,12 +1,11 @@
-package model;
+package Delivery;
 
 public class MedicineDelivery {
-	private String deliveryID;
     private String address;
     private String deliveryStatus;
+    private Payment payment;
 
-    public MedicineDelivery(String deliveryID, String address, String status) {
-        this.deliveryID = deliveryID;
+    public MedicineDelivery( String address, String status) {
         this.address = address;
         this.deliveryStatus = status;
     }
@@ -17,5 +16,13 @@ public class MedicineDelivery {
 
     public void updateDeliveryStatus(String status) {
         this.deliveryStatus = status;
+    }
+    
+    public void payDelivery() {
+        if (payment != null) {
+            payment.pay();
+        } else {
+            System.out.println("Belum ada pembayaran dibuat.");
+        }
     }
 }

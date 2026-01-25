@@ -8,7 +8,6 @@ public class Doctor {
     public Doctor(String name, String specialty) {
         this.name = name;
         this.specialty = specialty;
-        this.numberPhone = "08123456789"; 
     }
 
     public Doctor(String name, String specialty, String numberPhone) {
@@ -16,6 +15,8 @@ public class Doctor {
         this.specialty = specialty;
         this.numberPhone = numberPhone;
     }
+    
+
 
     public String getName() {
         return name;
